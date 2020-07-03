@@ -1,4 +1,5 @@
 const { admin, db } = require('../util/admin');
+const jwt = require('jsonwebtoken');
 
 const config = require('../util/config');
 
@@ -19,12 +20,21 @@ exports.login = (req, res) => {
         return res.status(400).json(errors);
     }
 
-    firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+    let response = {};
+
+    db.collection('users').where('email', '==', user.email).limit(1).get()
+        .then(data => {
+            response.userType = data.docs[0].data().userType;
+            response.firstName = data.docs[0].data().firstName;
+            response.lastName = data.docs[0].data().lastName;
+            response.userId = data.docs[0].data().userId;
+            return firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+        })
         .then(data => {
             return data.user.getIdToken();
         })
         .then(token => {
-            return res.status(200).json({ token });
+            return res.status(200).json({ response, token });
         })
         .catch(err => {
             console.error(err);
@@ -34,8 +44,6 @@ exports.login = (req, res) => {
 
 exports.getAuthenticatedUser = (req, res) => {
     let userData = {};
-
-    console.log(req.user.uid)
 
     db.doc(`/users/${req.user.uid}`).get()
         .then(doc => {
