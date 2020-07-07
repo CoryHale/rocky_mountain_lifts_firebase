@@ -70,7 +70,25 @@ exports.getAllEmployees = (req, res) => {
                     employees.push(doc.data());
                 }
             });
-            return res.status(200).json({ employees })
+            return res.status(200).json({ employees });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};
+
+exports.getAllCustomers = (req, res) => {
+    let customers = [];
+
+    db.collection('users').where('userType', '==', 'customer').get()
+        .then(data => {
+            data.forEach(doc => {
+                if(doc.exists) {
+                    customers.push(doc.data());
+                }
+            });
+            return res.status(200).json({ customers });
         })
         .catch(err => {
             console.error(err);
