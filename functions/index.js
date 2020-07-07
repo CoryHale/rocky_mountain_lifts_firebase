@@ -9,7 +9,8 @@ const { db } = require('./util/admin');
 
 const { 
     login, 
-    getAuthenticatedUser 
+    getAuthenticatedUser,
+    getAllEmployees
 } = require('./handlers/users');
 
 const {
@@ -18,7 +19,8 @@ const {
 
 // user routes
 server.post('/login', login);
-server.get('/user', FBAuth, getAuthenticatedUser)
+server.get('/user', FBAuth, getAuthenticatedUser);
+server.get('/employees', FBAuth, getAllEmployees);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
