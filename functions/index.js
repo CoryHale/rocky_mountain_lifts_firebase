@@ -8,6 +8,7 @@ server.use(cors());
 const { db } = require('./util/admin');
 
 const { 
+    registerEmployee,
     login, 
     getAuthenticatedUser,
     getAllEmployees,
@@ -19,6 +20,7 @@ const {
 } = require('./handlers/tasks');
 
 // user routes
+server.post('/e_register', FBAuth, registerEmployee);
 server.post('/login', login);
 server.get('/user', FBAuth, getAuthenticatedUser);
 server.get('/employees', FBAuth, getAllEmployees);

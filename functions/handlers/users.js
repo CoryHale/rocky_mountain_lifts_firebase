@@ -5,7 +5,61 @@ const config = require('../util/config');
 const firebase = require('firebase');
 firebase.initializeApp(config);
 
-const { validateLoginData } = require('../util/middleware');
+const { validateRegisterData, validateLoginData } = require('../util/middleware');
+
+exports.registerEmployee = (req, res) => {
+    const newUser = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        jobTitle: req.body.jobTitle,
+        userType: 'employee',
+        tierLevel: req.body.tierLevel,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword
+    };
+
+    const { valid, errors } = validateRegisterData(newUser);
+
+    if(!valid) {
+        return res.status(400).json(errors);
+    };
+
+    let token, userId;
+    firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
+        .then(data => {
+            userId = data.user.uid;
+            return data.user.getIdToken();
+        })
+        .then(idToken => {
+            token = idToken;
+            const userCredentials = {
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                jobTitle: newUser.jobTitle,
+                userType: newUser.userType,
+                tierLevel: newUser.tierLevel,
+                phoneNumber: newUser.phoneNumber,
+                email: newUser.email,
+                userId
+            };
+            return db.doc(`/users/${userId}`).set(userCredentials);
+        })
+        .then(() => {
+            return res.status(201).json({ token });
+        })
+        .catch(err => {
+            console.error(err);
+            if(err.code === 'auth/email-already-in-use') {
+                return res.status(400).json({ email: 'Email is already in use' });
+            } else if(err.code === 'auth/invalid-email') {
+                return res.status(400).json({ email: 'Email is invalid' });
+            } else {
+                return res.status(500).json({ general: 'Something went wrong, please try again' });
+            };
+        });
+};
 
 exports.login = (req, res) => {
     const user = {
@@ -86,7 +140,7 @@ exports.getAllCustomers = (req, res) => {
             data.forEach(doc => {
                 if(doc.exists) {
                     customers.push(doc.data());
-                }
+                };
             });
             return res.status(200).json({ customers });
         })
