@@ -1,6 +1,4 @@
 exports.validateRegisterData = data => {
-
-    console.log("inside validateRegisterData")
     let errors = {};
 
     if(isEmpty(data.email)) {
@@ -15,15 +13,22 @@ exports.validateRegisterData = data => {
     if(isEmpty(data.lastName)) {
         errors.lastName = 'Must not be empty';
     };
-    if(isEmpty(data.jobTitle)) {
-        errors.jobTitle = 'Must not be empty';
+    if(data.jobTitle === '' || data.jobTitle === 'Select') {
+        errors.jobTitle = 'Must select a job title';
+    };
+    if(data.tierLevel === null || data.tierLevel === 'Select') {
+        errors.tierLevel = 'Must select a tier level';
     };
     if(isEmpty(data.phoneNumber)) {
         errors.phoneNumber = 'Must not be empty';
+    } else if(!isPhoneNumber(data.phoneNumber)) {
+        errors.phoneNumber = 'Must be a valid phone number';
     };
     if(isEmpty(data.password)) {
         errors.password = 'Must not be empty';
-    };
+    } else if(!isStrongPassword(data.password)) {
+        errors.password = 'Weak password'
+    }
     if(data.password !== data.confirmPassword) {
         errors.confirmPassword = 'Passwords must match';
     };
@@ -63,6 +68,24 @@ const isEmpty = string => {
 const isEmail = email => {
     const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(email.match(regEx)) {
+        return true;
+    } else {
+        return false;
+    };
+};
+
+const isPhoneNumber = phoneNumber => {
+    const regEx = /^[0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{4}$/;
+    if(phoneNumber.match(regEx)) {
+        return true;
+    } else {
+        return false;
+    };
+};
+
+const isStrongPassword = password => {
+    const regEx = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()--_+.]).{8,}$/;
+    if(password.match(regEx)) {
         return true;
     } else {
         return false;
