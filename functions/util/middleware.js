@@ -55,6 +55,33 @@ exports.validateLoginData = data => {
     };
 };
 
+exports.validateUpdateData = data => {
+    let errors = {};
+
+    if(isEmpty(data.firstName)) {
+        errors.firstName = 'Must not be empty';
+    };
+    if(isEmpty(data.lastName)) {
+        errors.lastName = 'Must not be empty';
+    };
+    if(data.jobTitle === 'Select') {
+        errors.jobTitle = 'Must select a job title';
+    };
+    if(data.tierLevel === 'Select') {
+        errors.tierLevel = 'Must select a tier level';
+    };
+    if(isEmpty(data.phoneNumber)) {
+        errors.phoneNumber = 'Must not be empty';
+    } else if(!isPhoneNumber(data.phoneNumber)) {
+        errors.phoneNumber = 'Must be a valid phone number';
+    };
+
+    return {
+        errors,
+        valid: Object.keys(errors).length === 0 ? true : false
+    };
+};
+
 // Helper Functions
 
 const isEmpty = string => {

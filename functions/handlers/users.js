@@ -13,6 +13,7 @@ exports.registerEmployee = (req, res) => {
         lastName: req.body.lastName,
         jobTitle: req.body.jobTitle,
         userType: 'employee',
+        active: true,
         tierLevel: req.body.tierLevel,
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
@@ -39,6 +40,7 @@ exports.registerEmployee = (req, res) => {
                 lastName: newUser.lastName,
                 jobTitle: newUser.jobTitle,
                 userType: newUser.userType,
+                active: newUser.active,
                 tierLevel: newUser.tierLevel,
                 phoneNumber: newUser.phoneNumber,
                 email: newUser.email,
@@ -143,6 +145,25 @@ exports.getAllCustomers = (req, res) => {
                 };
             });
             return res.status(200).json({ customers });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};
+
+exports.editEmployee = (req, res) => {
+    let editedUserData = {};
+
+    const { valid, errors } = validateUpdateData(editedUserData);
+
+    if(!valid) {
+        return res.status(400).json(errors);
+    };
+
+    db.doc(`/users/${req.body.userId}`).update(editedUserData)
+        .then(() => {
+            return res.status(200).json({ message: 'Update successful' });
         })
         .catch(err => {
             console.error(err);

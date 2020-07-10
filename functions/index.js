@@ -12,7 +12,8 @@ const {
     login, 
     getAuthenticatedUser,
     getAllEmployees,
-    getAllCustomers
+    getAllCustomers,
+    editEmployee
 } = require('./handlers/users');
 
 const {
@@ -25,6 +26,7 @@ server.post('/login', login);
 server.get('/user', FBAuth, getAuthenticatedUser);
 server.get('/employees', FBAuth, getAllEmployees);
 server.get('/customers', FBAuth, getAllCustomers);
+server.put('/employee', FBAuth, editEmployee);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
