@@ -4,7 +4,7 @@ const serviceAccount = require('../key/rocky-mountain-lifts-crm-db-firebase-admi
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://rocky-mountain-lifts-crem-db.firebaseio.com',
+    databaseURL: 'https://rocky-mountain-lifts-crm-db.firebaseio.com',
     storageBucket: "rocky-mountain-lifts-crm-db.appspot.com"
 });
 

@@ -174,8 +174,6 @@ exports.editEmployee = (req, res) => {
 exports.changeEmployeeStatus = (req, res) => {
     let updatedStatus = {active: !req.body.active};
 
-    console.log(updatedStatus)
-
     db.doc(`/users/${req.body.userId}`).update(updatedStatus)
         .then(() => {
             return res.status(200).json({ message: 'Update successful' });
