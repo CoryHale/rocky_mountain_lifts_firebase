@@ -5,7 +5,7 @@ const config = require('../util/config');
 const firebase = require('firebase');
 firebase.initializeApp(config);
 
-const { validateRegisterData, validateLoginData } = require('../util/middleware');
+const { validateRegisterData, validateLoginData, validateUpdateData } = require('../util/middleware');
 
 exports.registerEmployee = (req, res) => {
     const newUser = {
@@ -153,7 +153,7 @@ exports.getAllCustomers = (req, res) => {
 };
 
 exports.editEmployee = (req, res) => {
-    let editedUserData = {};
+    let editedUserData = req.body;
 
     const { valid, errors } = validateUpdateData(editedUserData);
 
@@ -162,6 +162,21 @@ exports.editEmployee = (req, res) => {
     };
 
     db.doc(`/users/${req.body.userId}`).update(editedUserData)
+        .then(() => {
+            return res.status(200).json({ message: 'Update successful' });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};
+
+exports.changeEmployeeStatus = (req, res) => {
+    let updatedStatus = {active: !req.body.active};
+
+    console.log(updatedStatus)
+
+    db.doc(`/users/${req.body.userId}`).update(updatedStatus)
         .then(() => {
             return res.status(200).json({ message: 'Update successful' });
         })
