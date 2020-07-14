@@ -21,6 +21,10 @@ const {
     getAllTasks
 } = require('./handlers/tasks');
 
+const {
+    getAllWorkOrders
+} = require('./handlers/workOrders')
+
 // user routes
 server.post('/e_register', FBAuth, registerEmployee);
 server.post('/login', login);
@@ -32,5 +36,8 @@ server.put('/employee/status', FBAuth, changeEmployeeStatus);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
+
+// work order routes
+server.get('/work_orders', FBAuth, getAllWorkOrders);
 
 exports.api = functions.https.onRequest(server);
