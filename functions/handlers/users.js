@@ -152,6 +152,24 @@ exports.getAllCustomers = (req, res) => {
         });
 };
 
+exports.getAllUsers = (req, res) => {
+    let users = [];
+
+    db.collection('users').get()
+        .then(data => {
+            data.forEach(doc => {
+                if(doc.exists) {
+                    users.push(doc.data());
+                };
+            });
+            return res.status(200).json({ users });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};
+
 exports.editEmployee = (req, res) => {
     let editedUserData = req.body;
 

@@ -13,6 +13,7 @@ const {
     getAuthenticatedUser,
     getAllEmployees,
     getAllCustomers,
+    getAllUsers,
     editEmployee,
     changeEmployeeStatus
 } = require('./handlers/users');
@@ -23,7 +24,7 @@ const {
 
 const {
     getAllWorkOrders
-} = require('./handlers/workOrders')
+} = require('./handlers/workOrders');
 
 // user routes
 server.post('/e_register', FBAuth, registerEmployee);
@@ -31,6 +32,7 @@ server.post('/login', login);
 server.get('/user', FBAuth, getAuthenticatedUser);
 server.get('/employees', FBAuth, getAllEmployees);
 server.get('/customers', FBAuth, getAllCustomers);
+server.get('/users', FBAuth, getAllUsers);
 server.put('/employee', FBAuth, editEmployee);
 server.put('/employee/status', FBAuth, changeEmployeeStatus);
 
