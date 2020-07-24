@@ -1,5 +1,7 @@
 const { admin, db } = require('../util/admin');
 
+const { validateWorkOrderData } = require('../util/middleware');
+
 exports.getAllWorkOrders = (req, res) => {
     let workOrders = [];
 
@@ -38,6 +40,14 @@ exports.createWorkOrder = (req, res) => {
     if(!valid) {
         return res.status(400).json(errors);
     };
+
+    db.doc(`/users/${workOrder.customer}`).get()
+        .then(doc => {
+            workOrder.customerName = `${doc.data().firstName} ${doc.data().lastName}`;
+        })
+        .catch(err => {
+            console.log(err)
+        });
 
     db.collection('work-orders').orderBy('createdAt', 'desc').limit(1).get()
         .then(data => {

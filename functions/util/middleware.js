@@ -82,6 +82,34 @@ exports.validateUpdateData = data => {
     };
 };
 
+exports.validateWorkOrderData = data => {
+    let errors = {};
+
+    if(isEmpty(data.customer)) {
+        errors.customer = 'Must not be empty';
+    };
+    if(isEmpty(data.serviceDate)) {
+        errors.serviceDate = 'Must not be empty';
+    };
+    if(isEmpty(data.serviceTime)) {
+        errors.serviceTime = 'Must not be empty';
+    };
+    if(isEmpty(data.serviceDescription)) {
+        errors.serviceDescription = 'Must not be empty';
+    };
+    if(data.serviceType.length === 0) {
+        errors.serviceType = 'Must not be empty';
+    };
+    if(data.crewMembers.length === 0) {
+        errors.crewMembers = 'Must not be empty';
+    };
+
+    return {
+        errors,
+        valid: Object.keys(errors).length === 0 ? true : false
+    };
+};
+
 // Helper Functions
 
 const isEmpty = string => {
