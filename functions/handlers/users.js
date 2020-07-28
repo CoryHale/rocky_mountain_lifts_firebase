@@ -201,3 +201,39 @@ exports.changeEmployeeStatus = (req, res) => {
             return res.status(500).json({ error: err.code });
         });
 };
+
+exports.getUsersInWorkOrder = (async (req, res) => {
+    const jobId = req.params.id;
+
+    if(jobId) {
+        const jobDoc = await db.doc(`/work-orders/${jobId}`).get();
+        const jobData = jobDoc.data();
+
+        if(!jobData) {
+            console.log('Job not found');
+            return;
+        };
+
+        let users = [];
+
+        users.push(jobData.customer);
+        jobData.crewMembers.forEach(member => {
+            users.push(member);
+        });
+
+        const fetchPromises = [];
+
+        users.forEach(userId => {
+            const nextPromise = db.doc(`/users/${userId}`).get();
+            fetchPromises.push(nextPromise);
+        });
+
+        const snapshots = await Promise.all(fetchPromises);
+        const responseArray = snapshots.map(snapshot => snapshot.data());
+        
+        return res.status(200).json({responseArray});
+    } else {
+        console.error('Something went wrong');
+        return res.status(500).json({ error: 'Something went wrong' });
+    };
+});
