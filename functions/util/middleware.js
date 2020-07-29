@@ -100,6 +100,12 @@ exports.validateWorkOrderData = data => {
     if(data.serviceType.length === 0) {
         errors.serviceType = 'Must not be empty';
     };
+    if(isEmpty(data.serviceManager)) {
+        errors.serviceManager = 'Must not be empty';
+    };
+    if(isEmpty(data.officeManager)) {
+        errors.officeManager = 'Must not be empty';
+    };
     if(data.crewMembers.length === 0) {
         errors.crewMembers = 'Must not be empty';
     };

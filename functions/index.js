@@ -15,8 +15,7 @@ const {
     getAllCustomers,
     getAllUsers,
     editEmployee,
-    changeEmployeeStatus,
-    getUsersInWorkOrder
+    changeEmployeeStatus
 } = require('./handlers/users');
 
 const {
@@ -25,7 +24,8 @@ const {
 
 const {
     getAllWorkOrders,
-    createWorkOrder
+    createWorkOrder,
+    getWorkOrder
 } = require('./handlers/workOrders');
 
 // user routes
@@ -37,7 +37,6 @@ server.get('/customers', FBAuth, getAllCustomers);
 server.get('/users', FBAuth, getAllUsers);
 server.put('/employee', FBAuth, editEmployee);
 server.put('/employee/status', FBAuth, changeEmployeeStatus);
-server.get('/work_order/:id/users', FBAuth, getUsersInWorkOrder);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
@@ -45,5 +44,6 @@ server.get('/tasks', FBAuth, getAllTasks);
 // work order routes
 server.get('/work_orders', FBAuth, getAllWorkOrders);
 server.post('/work_orders', FBAuth, createWorkOrder);
+server.get('/work_order/:id', FBAuth, getWorkOrder);
 
 exports.api = functions.https.onRequest(server);
