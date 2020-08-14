@@ -35,7 +35,8 @@ exports.createWorkOrder = (req, res) => {
         notes: req.body.notes,
         officeNotes: req.body.officeNotes,
         quote: req.body.quote,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        serviceDone: []
     };
 
     const {valid, errors} = validateWorkOrderData(workOrder);
