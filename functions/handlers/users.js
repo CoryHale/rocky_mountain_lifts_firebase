@@ -5,7 +5,7 @@ const config = require('../util/config');
 const firebase = require('firebase');
 firebase.initializeApp(config);
 
-const { validateRegisterData, validateLoginData, validateUpdateData } = require('../util/middleware');
+const { validateRegisterData, validateCustomerData, validateLoginData, validateUpdateData } = require('../util/middleware');
 
 exports.registerEmployee = (req, res) => {
     const newUser = {
@@ -200,4 +200,116 @@ exports.changeEmployeeStatus = (req, res) => {
             console.error(err);
             return res.status(500).json({ error: err.code });
         });
+};
+
+exports.registerCustomer = (req, res) => {
+    const newUser = {
+        businessName: req.body.businessName,
+        industry: req.body.industry,
+        primaryContact: {
+            firstName: req.body.primaryContact.firstName,
+            lastName: req.body.primaryContact.lastName
+        },
+        primaryPhoneNumber: req.body.primaryPhoneNumber,
+        primaryEmail: req.body.primaryEmail,
+        billingContact: {
+            firstName: req.body.billingContact.firstName,
+            lastName: req.body.billingContact.lastName
+        },
+        billingPhoneNumber: req.body.billingPhoneNumber,
+        billingEmail: req.body.billingEmail,
+        shopAddress: {
+            address: req.body.shopAddress.address,
+            city: req.body.shopAddress.city,
+            state: req.body.shopAddress.state,
+            zipcode: req.body.shopAddress.zipcode
+        },
+        billingAddress: {
+            address: req.body.billingAddress.address,
+            city: req.body.billingAddress.city,
+            state: req.body.billingAddress.state,
+            zipcode: req.body.billingAddress.zipcode
+        },
+        userType: 'customer',
+        password: 'Lifts2020!'
+    };
+
+    const { valid, errors } = validateCustomerData(newUser);
+
+    if(!valid) {
+        return res.status(400).json(errors);
+    };
+
+    let token, userId;
+    firebase.auth().createUserWithEmailAndPassword(newUser.primaryEmail, newUser.password)
+        .then(data => {
+            userId = data.user.uid;
+            return data.user.getIdToken();
+        })
+        .then(idToken => {
+            token = idToken;
+            const userCredentials = {
+                businessName: req.body.businessName,
+                industry: req.body.industry,
+                primaryContact: {
+                    firstName: req.body.primaryContact.firstName,
+                    lastName: req.body.primaryContact.lastName
+                },
+                primaryPhoneNumber: req.body.primaryPhoneNumber,
+                primaryEmail: req.body.primaryEmail,
+                billingContact: {
+                    firstName: req.body.billingContact.firstName,
+                    lastName: req.body.billingContact.lastName
+                },
+                billingPhoneNumber: req.body.billingPhoneNumber,
+                billingEmail: req.body.billingEmail,
+                shopAddress: {
+                    address: req.body.shopAddress.address,
+                    city: req.body.shopAddress.city,
+                    state: req.body.shopAddress.state,
+                    zipcode: req.body.shopAddress.zipcode
+                },
+                billingAddress: {
+                    address: req.body.billingAddress.address,
+                    city: req.body.billingAddress.city,
+                    state: req.body.billingAddress.state,
+                    zipcode: req.body.billingAddress.zipcode
+                },
+                userType: 'customer',
+                userId
+            };
+            return db.doc(`/users/${userId}`).set(userCredentials);
+        })
+        .then(() => {
+            return res.status(201).json({ token });
+        })
+        .catch(err => {
+            console.error(err);
+            if(err.code === 'auth/email-already-in-use') {
+                return res.status(400).json({ email: 'Email is already in use' });
+            } else if(err.code === 'auth/invalid-email') {
+                return res.status(400).json({ email: 'Email is invalid' });
+            } else {
+                return res.status(500).json({ general: 'Something went wrong, please try again' });
+            };
+        });
+};
+
+exports.getCustomer = (req, res) => {
+    const customerId = req.params.id;
+
+    if(customerId) {
+        const customerDoc = sdb.doc(`/customer/${customerId}`).get();
+        const customerData = customerDoc.data();
+
+        if(!customerData) {
+            console.log('Customer not found');
+            return;
+        };
+        
+        return res.status(200).json(customerData);
+    } else {
+        console.error('Something went wrong');
+        return res.status(500).json({ error: 'Something went wrong' });
+    };
 };

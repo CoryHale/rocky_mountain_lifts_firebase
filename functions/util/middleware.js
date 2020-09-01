@@ -39,6 +39,150 @@ exports.validateRegisterData = data => {
     };
 };
 
+exports.validateCustomerData = data => {
+    let errors = {};
+
+    if(isEmpty(data.businessName)) {
+        errors.businessName = 'Must not be empty';
+    };
+    if(isEmpty(data.industry)) {
+        errors.industry = 'Must not be empty';
+    };
+    if(data.primaryContact) {
+        if(isEmpty(data.primaryContact.firstName)) {
+            if(!errors.primaryContact) {
+                errors.primaryContact = {};
+            };
+            errors.primaryContact.firstName = 'Must not be empty'
+        };
+        if(isEmpty(data.primaryContact.lastName)) {
+            if(!errors.primaryContact) {
+                errors.primaryContact = {};
+            };
+            errors.primaryContact.lastName = 'Must not be empty';
+        };
+    } else {
+        if(!errors.primaryContact) {
+            errors.primaryContact = {};
+        };
+        errors.primaryContact.firstName = 'Must not be empty';
+        errors.primaryContact.lastName = 'Must not be empty';
+    };
+    if(isEmpty(data.primaryPhoneNumber)) {
+        errors.primaryPhoneNumber = 'Must not be empty';
+    } else if(!isPhoneNumber(data.primaryPhoneNumber)) {
+        errors.primaryPhoneNumber = 'Must be a valid phone number';
+    };
+    if(isEmpty(data.primaryEmail)) {
+        errors.primaryEmail = 'Must not be empty';
+    } else if(!isEmail(data.primaryEmail)) {
+        errors.primaryEmail = 'Must be a valid email address';
+    };
+    if(data.billingContact) {
+        if(isEmpty(data.billingContact.firstName)) {
+            if(!errors.billingContact) {
+                errors.billingContact = {};
+            };
+            errors.billingContact.firstName = 'Must not be empty';
+        };
+        if(isEmpty(data.billingContact.lastName)) {
+            if(!errors.billingContact) {
+                errors.billingContact = {};
+            };
+            errors.billingContact.lastName = 'Must not be empty';
+        };
+    } else {
+        if(!errors.billingContact) {
+            errors.billingContact = {};
+        };
+        errors.billingContact.firstName = 'Must not be empty';
+        errors.billingContact.lastName = 'Must not be empty';
+    };
+    if(isEmpty(data.billingPhoneNumber)) {
+        errors.billingPhoneNumber = 'Must not be empty';
+    } else if(!isPhoneNumber(data.billingPhoneNumber)) {
+        errors.billingPhoneNumber = 'Must be a valid phone number';
+    };
+    if(isEmpty(data.billingEmail)) {
+        errors.billingEmail = 'Must not be empty';
+    } else if(!isEmail(data.billingEmail)) {
+        errors.billingEmail = 'Must be a valid email address';
+    };
+    if(data.shopAddress) {
+        if(isEmpty(data.shopAddress.address)) {
+            if(!errors.shopAddress) {
+                errors.shopAddress = {};
+            };
+            errors.shopAddress.address = 'Must not be empty';
+        };
+        if(isEmpty(data.shopAddress.city)) {
+            if(!errors.shopAddress) {
+                errors.shopAddress = {};
+            };
+            errors.shopAddress.city = 'Must not be empty';
+        };
+        if(isEmpty(data.shopAddress.state)) {
+            if(!errors.shopAddress) {
+                errors.shopAddress = {};
+            };
+            errors.shopAddress.state = 'Must not be empty';
+        };
+        if(isEmpty(data.shopAddress.zipcode)) {
+            if(!errors.shopAddress) {
+                errors.shopAddress = {};
+            };
+            errors.shopAddress.zipcode = 'Must not be empty';
+        };
+    } else {
+        if(!errors.shopAddress) {
+            errors.shopAddress = {};
+        };
+        errors.shopAddress.address = 'Must not be empty';
+        errors.shopAddress.city = 'Must not be empty';
+        errors.shopAddress.state = 'Must not be empty';
+        errors.shopAddress.zipcode = 'Must not be empty';
+    };
+    if(data.billingAddress) {
+        if(isEmpty(data.billingAddress.address)) {
+            if(!errors.billingAddress) {
+                errors.billingAddress = {};
+            };
+            errors.billingAddress.address = 'Must not be empty';
+        };
+        if(isEmpty(data.billingAddress.city)) {
+            if(!errors.billingAddress) {
+                errors.billingAddress = {};
+            };
+            errors.billingAddress.city = 'Must not be empty';
+        };
+        if(isEmpty(data.billingAddress.state)) {
+            if(!errors.billingAddress) {
+                errors.billingAddress = {};
+            };
+            errors.billingAddress.state = 'Must not be empty';
+        };
+        if(isEmpty(data.billingAddress.zipcode)) {
+            if(!errors.billingAddress) {
+                errors.billingAddress = {};
+            };
+            errors.billingAddress.zipcode = 'Must not be empty';
+        };
+    } else {
+        if(!errors.billingAddress) {
+            errors.billingAddress = {};
+        };
+        errors.billingAddress.address = 'Must not be empty';
+        errors.billingAddress.city = 'Must not be empty';
+        errors.billingAddress.state = 'Must not be empty';
+        errors.billingAddress.zipcode = 'Must not be empty';
+    };
+
+    return {
+        errors,
+        valid: Object.keys(errors).length === 0 ? true : false
+    };
+};
+
 exports.validateLoginData = data => {
     let errors = {};
 
