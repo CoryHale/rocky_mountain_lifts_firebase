@@ -299,15 +299,16 @@ exports.getCustomer = (req, res) => {
     const customerId = req.params.id;
 
     if(customerId) {
-        const customerDoc = sdb.doc(`/customer/${customerId}`).get();
-        const customerData = customerDoc.data();
-
-        if(!customerData) {
-            console.log('Customer not found');
-            return;
-        };
-        
-        return res.status(200).json(customerData);
+        db.doc(`/users/${customerId}`).get()
+            .then(doc => {
+                if(doc.exists) {
+                    return res.status(200).json(doc.data());
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                return res.status(500).json({ error: err.code });
+            })
     } else {
         console.error('Something went wrong');
         return res.status(500).json({ error: 'Something went wrong' });
