@@ -17,7 +17,8 @@ const {
     editEmployee,
     changeEmployeeStatus,
     registerCustomer,
-    getCustomer
+    getCustomer,
+    addEmployeeToCustomer
 } = require('./handlers/users');
 
 const {
@@ -41,6 +42,7 @@ server.put('/employee', FBAuth, editEmployee);
 server.put('/employee/status', FBAuth, changeEmployeeStatus);
 server.post('/c_register', FBAuth, registerCustomer);
 server.get('/customer/:id', FBAuth, getCustomer);
+server.put('/customer', FBAuth, addEmployeeToCustomer);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);

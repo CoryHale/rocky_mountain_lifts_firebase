@@ -231,7 +231,8 @@ exports.registerCustomer = (req, res) => {
             zipcode: req.body.billingAddress.zipcode
         },
         userType: 'customer',
-        password: 'Lifts2020!'
+        password: 'Lifts2020!',
+        employees: []
     };
 
     const { valid, errors } = validateCustomerData(newUser);
@@ -276,6 +277,7 @@ exports.registerCustomer = (req, res) => {
                     zipcode: req.body.billingAddress.zipcode
                 },
                 userType: 'customer',
+                employees: [],
                 userId
             };
             return db.doc(`/users/${userId}`).set(userCredentials);
@@ -312,5 +314,21 @@ exports.getCustomer = (req, res) => {
     } else {
         console.error('Something went wrong');
         return res.status(500).json({ error: 'Something went wrong' });
+    };
+};
+
+exports.addEmployeeToCustomer = (req, res) => {
+    const customerId = req.body.userId;
+    let updateData = req.body;
+
+    if(customerId) {
+        db.doc(`/users/${customerId}`).update(updateData)
+            .then(() => {
+                return res.status(200).json({ message: 'Update Successful' });
+            })
+            .catch(err => {
+                console.error(err);
+                return res.status(500).json({ error: err.code });
+            });
     };
 };
