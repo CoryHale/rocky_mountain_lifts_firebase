@@ -5,7 +5,7 @@ const { validateWorkOrderData } = require('../util/middleware');
 exports.getAllWorkOrders = (req, res) => {
     let workOrders = [];
 
-    db.collection('work-orders').get()
+    db.collection('work-orders').orderBy('serviceDate').orderBy('serviceTime').get()
         .then(data => {
             data.forEach(doc => {
                 if(doc.exists) {

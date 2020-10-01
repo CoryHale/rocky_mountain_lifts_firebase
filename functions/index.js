@@ -1,11 +1,17 @@
 const functions = require('firebase-functions');
+const cors = require('cors');
 const server = require('express')();
 const FBAuth = require('./util/fbAuth');
 
-const cors = require('cors');
-server.use(cors());
+cors({
+    origin: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
+    methods: ['OPTIONS', 'GET', 'PUT', 'POST', 'DELETE']
+});
 
 const { db } = require('./util/admin');
+
+server.use(cors());
 
 const { 
     registerEmployee,
@@ -22,7 +28,9 @@ const {
 } = require('./handlers/users');
 
 const {
-    getAllTasks
+    getAllTasks,
+    getCustomerTasks,
+    createTask
 } = require('./handlers/tasks');
 
 const {
@@ -46,6 +54,8 @@ server.put('/customer', FBAuth, addEmployeeToCustomer);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
+server.get('/customer_tasks/:id', FBAuth, getCustomerTasks);
+server.post('/tasks', FBAuth, createTask);
 
 // work order routes
 server.get('/work_orders', FBAuth, getAllWorkOrders);

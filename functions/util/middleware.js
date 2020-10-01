@@ -260,6 +260,28 @@ exports.validateWorkOrderData = data => {
     };
 };
 
+exports.validateTaskData = data => {
+    let errors = {};
+
+    if(isEmpty(data.taskDescription)) {
+        errors.taskDescription = 'Must not be empty';
+    };
+    if(isEmpty(data.taskDate)) {
+        errors.taskDate = 'Must not be empty';
+    };
+    if(isEmpty(data.taskTime)) {
+        errors.taskTime = 'Must not be empty';
+    };
+    if(isEmpty(data.employeeId)) {
+        errors.employeeId = 'Must select an option';
+    };
+
+    return {
+        errors,
+        valid: Object.keys(errors).length === 0 ? true : false
+    };
+};
+
 // Helper Functions
 
 const isEmpty = string => {

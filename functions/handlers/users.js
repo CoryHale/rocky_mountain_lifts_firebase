@@ -137,7 +137,7 @@ exports.getAllEmployees = (req, res) => {
 exports.getAllCustomers = (req, res) => {
     let customers = [];
 
-    db.collection('users').where('userType', '==', 'customer').get()
+    db.collection('users').where('userType', '==', 'customer').orderBy('businessName').get()
         .then(data => {
             data.forEach(doc => {
                 if(doc.exists) {
