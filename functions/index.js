@@ -28,6 +28,10 @@ const {
 } = require('./handlers/users');
 
 const {
+    getCustomerNotes
+} = require('./handlers/notes');
+
+const {
     getAllTasks,
     getCustomerTasks,
     createTask
@@ -51,6 +55,9 @@ server.put('/employee/status', FBAuth, changeEmployeeStatus);
 server.post('/c_register', FBAuth, registerCustomer);
 server.get('/customer/:id', FBAuth, getCustomer);
 server.put('/customer', FBAuth, addEmployeeToCustomer);
+
+// notes routes
+server.get('/notes/:id', FBAuth, getCustomerNotes);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
