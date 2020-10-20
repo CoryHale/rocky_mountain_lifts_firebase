@@ -210,14 +210,18 @@ exports.registerCustomer = (req, res) => {
             firstName: req.body.primaryContact.firstName,
             lastName: req.body.primaryContact.lastName
         },
-        primaryPhoneNumber: req.body.primaryPhoneNumber,
+        primaryOfficeNumber: req.body.primaryOfficeNumber,
+        primaryCellNumber: req.body.primaryCellNumber,
         primaryEmail: req.body.primaryEmail,
+        primaryJobTitle: req.body.primaryJobTitle,
         billingContact: {
             firstName: req.body.billingContact.firstName,
             lastName: req.body.billingContact.lastName
         },
-        billingPhoneNumber: req.body.billingPhoneNumber,
+        billingOfficeNumber: req.body.billingOfficeNumber,
+        billingCellNumber: req.body.billingCellNumber,
         billingEmail: req.body.billingEmail,
+        billingJobTitle: req.body.billingJobTitle,
         shopAddress: {
             address: req.body.shopAddress.address,
             city: req.body.shopAddress.city,
@@ -230,6 +234,7 @@ exports.registerCustomer = (req, res) => {
             state: req.body.billingAddress.state,
             zipcode: req.body.billingAddress.zipcode
         },
+        noBillingContact: req.body.noBillingContact,
         userType: 'customer',
         password: 'Lifts2020!',
         employees: []
@@ -256,13 +261,17 @@ exports.registerCustomer = (req, res) => {
                     firstName: req.body.primaryContact.firstName,
                     lastName: req.body.primaryContact.lastName
                 },
-                primaryPhoneNumber: req.body.primaryPhoneNumber,
+                primaryJobTitle: req.body.primaryJobTitle,
+                primaryOfficeNumber: req.body.primaryOfficeNumber,
+                primaryCellNumber: req.body.primaryCellNumber,
                 primaryEmail: req.body.primaryEmail,
                 billingContact: {
                     firstName: req.body.billingContact.firstName,
                     lastName: req.body.billingContact.lastName
                 },
-                billingPhoneNumber: req.body.billingPhoneNumber,
+                billingJobTitle: req.body.billingJobTitle,
+                billingOfficeNumber: req.body.billingOfficeNumber,
+                billingCellNumber: req.body.billingCellNumber,
                 billingEmail: req.body.billingEmail,
                 shopAddress: {
                     address: req.body.shopAddress.address,

@@ -68,45 +68,21 @@ exports.validateCustomerData = data => {
         errors.primaryContact.firstName = 'Must not be empty';
         errors.primaryContact.lastName = 'Must not be empty';
     };
-    if(isEmpty(data.primaryPhoneNumber)) {
-        errors.primaryPhoneNumber = 'Must not be empty';
-    } else if(!isPhoneNumber(data.primaryPhoneNumber)) {
-        errors.primaryPhoneNumber = 'Must be a valid phone number';
+    if(isEmpty(data.primaryOfficeNumber) && isEmpty(data.primaryCellNumber)) {
+        errors.primaryOfficeNumber = 'Must not be empty';
+        errors.primaryCellNumber = 'Must not be empty';
+    } else if(!isEmpty(data.primaryOfficeNumber) && !isPhoneNumber(data.primaryOfficeNumber)) {
+        errors.primaryOfficeNumber = 'Must be a valid phone number';
+    } else if(!isEmpty(data.primaryCellNumber) && !isPhoneNumber(data.primaryCellNumber)) {
+        errors.primaryCellNumber = 'Must be a valid phone number';
     };
     if(isEmpty(data.primaryEmail)) {
         errors.primaryEmail = 'Must not be empty';
     } else if(!isEmail(data.primaryEmail)) {
         errors.primaryEmail = 'Must be a valid email address';
     };
-    if(data.billingContact) {
-        if(isEmpty(data.billingContact.firstName)) {
-            if(!errors.billingContact) {
-                errors.billingContact = {};
-            };
-            errors.billingContact.firstName = 'Must not be empty';
-        };
-        if(isEmpty(data.billingContact.lastName)) {
-            if(!errors.billingContact) {
-                errors.billingContact = {};
-            };
-            errors.billingContact.lastName = 'Must not be empty';
-        };
-    } else {
-        if(!errors.billingContact) {
-            errors.billingContact = {};
-        };
-        errors.billingContact.firstName = 'Must not be empty';
-        errors.billingContact.lastName = 'Must not be empty';
-    };
-    if(isEmpty(data.billingPhoneNumber)) {
-        errors.billingPhoneNumber = 'Must not be empty';
-    } else if(!isPhoneNumber(data.billingPhoneNumber)) {
-        errors.billingPhoneNumber = 'Must be a valid phone number';
-    };
-    if(isEmpty(data.billingEmail)) {
-        errors.billingEmail = 'Must not be empty';
-    } else if(!isEmail(data.billingEmail)) {
-        errors.billingEmail = 'Must be a valid email address';
+    if(isEmpty(data.primaryJobTitle)) {
+        errors.primaryJobTitle = 'Must not be empty';
     };
     if(data.shopAddress) {
         if(isEmpty(data.shopAddress.address)) {
@@ -142,40 +118,78 @@ exports.validateCustomerData = data => {
         errors.shopAddress.state = 'Must not be empty';
         errors.shopAddress.zipcode = 'Must not be empty';
     };
-    if(data.billingAddress) {
-        if(isEmpty(data.billingAddress.address)) {
+    if(!data.noBillingContact) {
+        if(data.billingContact) {
+            if(isEmpty(data.billingContact.firstName)) {
+                if(!errors.billingContact) {
+                    errors.billingContact = {};
+                };
+                errors.billingContact.firstName = 'Must not be empty';
+            };
+            if(isEmpty(data.billingContact.lastName)) {
+                if(!errors.billingContact) {
+                    errors.billingContact = {};
+                };
+                errors.billingContact.lastName = 'Must not be empty';
+            };
+        } else {
+            if(!errors.billingContact) {
+                errors.billingContact = {};
+            };
+            errors.billingContact.firstName = 'Must not be empty';
+            errors.billingContact.lastName = 'Must not be empty';
+        };
+        if(isEmpty(data.billingOfficeNumber) && isEmpty(data.billingCellNumber)) {
+            errors.billingOfficeNumber = 'Must not be empty';
+            errors.billingCellNumber = 'Must not be empty';
+        } else if(!isEmpty(data.billingOfficeNumber) && !isPhoneNumber(data.billingOfficeNumber)) {
+            errors.billingOfficeNumber = 'Must be a valid phone number';
+        } else if(!isEmpty(data.billingCellNumber) && !isPhoneNumber(data.billingCellNumber)) {
+            errors.billingCellNumber = 'Must be a valid phone number';
+        };
+        if(isEmpty(data.billingEmail)) {
+            errors.billingEmail = 'Must not be empty';
+        } else if(!isEmail(data.billingEmail)) {
+            errors.billingEmail = 'Must be a valid email address';
+        };
+        if(isEmpty(data.billingJobTitle)) {
+            errors.billingJobTitle = 'Must not be empty';
+        };
+        if(data.billingAddress) {
+            if(isEmpty(data.billingAddress.address)) {
+                if(!errors.billingAddress) {
+                    errors.billingAddress = {};
+                };
+                errors.billingAddress.address = 'Must not be empty';
+            };
+            if(isEmpty(data.billingAddress.city)) {
+                if(!errors.billingAddress) {
+                    errors.billingAddress = {};
+                };
+                errors.billingAddress.city = 'Must not be empty';
+            };
+            if(isEmpty(data.billingAddress.state)) {
+                if(!errors.billingAddress) {
+                    errors.billingAddress = {};
+                };
+                errors.billingAddress.state = 'Must not be empty';
+            };
+            if(isEmpty(data.billingAddress.zipcode)) {
+                if(!errors.billingAddress) {
+                    errors.billingAddress = {};
+                };
+                errors.billingAddress.zipcode = 'Must not be empty';
+            };
+        } else {
             if(!errors.billingAddress) {
                 errors.billingAddress = {};
             };
             errors.billingAddress.address = 'Must not be empty';
-        };
-        if(isEmpty(data.billingAddress.city)) {
-            if(!errors.billingAddress) {
-                errors.billingAddress = {};
-            };
             errors.billingAddress.city = 'Must not be empty';
-        };
-        if(isEmpty(data.billingAddress.state)) {
-            if(!errors.billingAddress) {
-                errors.billingAddress = {};
-            };
             errors.billingAddress.state = 'Must not be empty';
-        };
-        if(isEmpty(data.billingAddress.zipcode)) {
-            if(!errors.billingAddress) {
-                errors.billingAddress = {};
-            };
             errors.billingAddress.zipcode = 'Must not be empty';
         };
-    } else {
-        if(!errors.billingAddress) {
-            errors.billingAddress = {};
-        };
-        errors.billingAddress.address = 'Must not be empty';
-        errors.billingAddress.city = 'Must not be empty';
-        errors.billingAddress.state = 'Must not be empty';
-        errors.billingAddress.zipcode = 'Must not be empty';
-    };
+    }
 
     return {
         errors,
