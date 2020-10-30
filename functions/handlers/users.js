@@ -211,6 +211,7 @@ exports.registerCustomer = (req, res) => {
             lastName: req.body.primaryContact.lastName
         },
         primaryOfficeNumber: req.body.primaryOfficeNumber,
+        primaryExt: req.body.primaryExt,
         primaryCellNumber: req.body.primaryCellNumber,
         primaryEmail: req.body.primaryEmail,
         primaryJobTitle: req.body.primaryJobTitle,
@@ -219,6 +220,7 @@ exports.registerCustomer = (req, res) => {
             lastName: req.body.billingContact.lastName
         },
         billingOfficeNumber: req.body.billingOfficeNumber,
+        billingExt: req.body.billingExt,
         billingCellNumber: req.body.billingCellNumber,
         billingEmail: req.body.billingEmail,
         billingJobTitle: req.body.billingJobTitle,
@@ -263,6 +265,7 @@ exports.registerCustomer = (req, res) => {
                 },
                 primaryJobTitle: req.body.primaryJobTitle,
                 primaryOfficeNumber: req.body.primaryOfficeNumber,
+                primaryExt: req.body.primaryExt,
                 primaryCellNumber: req.body.primaryCellNumber,
                 primaryEmail: req.body.primaryEmail,
                 billingContact: {
@@ -271,6 +274,7 @@ exports.registerCustomer = (req, res) => {
                 },
                 billingJobTitle: req.body.billingJobTitle,
                 billingOfficeNumber: req.body.billingOfficeNumber,
+                billingExt: req.body.billingExt,
                 billingCellNumber: req.body.billingCellNumber,
                 billingEmail: req.body.billingEmail,
                 shopAddress: {
@@ -303,6 +307,28 @@ exports.registerCustomer = (req, res) => {
             } else {
                 return res.status(500).json({ general: 'Something went wrong, please try again' });
             };
+        });
+};
+
+exports.editCustomer = (req, res) => {
+    let editedUserData = req.body;
+
+    const { valid, errors } = validateCustomerData(editedUserData);
+
+    console.log(req.body.noBillingContact)
+    console.log(valid)
+
+    if(!valid) {
+        return res.status(400).json(errors);
+    };
+
+    db.doc(`/users/${req.body.userId}`).update(editedUserData)
+        .then(() => {
+            return res.status(200).json({ message: 'Update successful' });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
         });
 };
 

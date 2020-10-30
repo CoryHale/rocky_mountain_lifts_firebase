@@ -23,6 +23,7 @@ const {
     editEmployee,
     changeEmployeeStatus,
     registerCustomer,
+    editCustomer,
     getCustomer,
     addEmployeeToCustomer
 } = require('./handlers/users');
@@ -53,6 +54,7 @@ server.get('/users', FBAuth, getAllUsers);
 server.put('/employee', FBAuth, editEmployee);
 server.put('/employee/status', FBAuth, changeEmployeeStatus);
 server.post('/c_register', FBAuth, registerCustomer);
+server.put('/customer', FBAuth, editCustomer);
 server.get('/customer/:id', FBAuth, getCustomer);
 server.put('/customer', FBAuth, addEmployeeToCustomer);
 
