@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-const serviceAccount = require('../key/rocky-mountain-lifts-crm-db-firebase-adminsdk-ogxew-07262a988e.json');
+const serviceAccount = require('../key/private-key.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
