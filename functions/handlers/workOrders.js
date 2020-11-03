@@ -1,6 +1,6 @@
 const { admin, db } = require('../util/admin');
 
-const { validateWorkOrderData } = require('../util/middleware');
+const { validateWorkOrderData, validateSubmittedWorkOrder } = require('../util/middleware');
 
 exports.getAllWorkOrders = (req, res) => {
     let workOrders = [];
@@ -107,3 +107,22 @@ exports.getWorkOrder = (async (req, res) => {
         return res.status(500).json({ error: 'Something went wrong' });
     };
 });
+
+exports.submitWorkOrderForReview = (req, res) => {
+    let submittedWorkOrder = req.body;
+
+    // const { valid, errors } = validateSubmittedWorkOrder(submittedWorkOrder);
+
+    // if(!valid) {
+    //     return res.status(400).json(errors);
+    // };
+
+    db.doc(`/work-orders/${req.body.jobNumber}`).update(submittedWorkOrder)
+        .then(() => {
+            return res.status(200).json({ message: 'Update successful' });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};

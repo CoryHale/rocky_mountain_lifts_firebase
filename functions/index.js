@@ -41,7 +41,8 @@ const {
 const {
     getAllWorkOrders,
     createWorkOrder,
-    getWorkOrder
+    getWorkOrder,
+    submitWorkOrderForReview,
 } = require('./handlers/workOrders');
 
 // user routes
@@ -70,5 +71,6 @@ server.post('/tasks', FBAuth, createTask);
 server.get('/work_orders', FBAuth, getAllWorkOrders);
 server.post('/work_orders', FBAuth, createWorkOrder);
 server.get('/work_order/:id', FBAuth, getWorkOrder);
+server.put('/work_order', FBAuth, submitWorkOrderForReview);
 
 exports.api = functions.https.onRequest(server);

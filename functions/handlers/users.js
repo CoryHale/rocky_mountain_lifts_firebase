@@ -315,9 +315,6 @@ exports.editCustomer = (req, res) => {
 
     const { valid, errors } = validateCustomerData(editedUserData);
 
-    console.log(req.body.noBillingContact)
-    console.log(valid)
-
     if(!valid) {
         return res.status(400).json(errors);
     };
