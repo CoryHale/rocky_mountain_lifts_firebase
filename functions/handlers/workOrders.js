@@ -5,7 +5,7 @@ const { validateWorkOrderData, validateSubmittedWorkOrder } = require('../util/m
 exports.getAllWorkOrders = (req, res) => {
     let workOrders = [];
 
-    db.collection('work-orders').orderBy('serviceDate').orderBy('serviceTime').get()
+    db.collection('work-orders').orderBy('serviceDate').orderBy('serviceStartTime').get()
         .then(data => {
             data.forEach(doc => {
                 if(doc.exists) {
@@ -24,19 +24,20 @@ exports.createWorkOrder = (req, res) => {
     const workOrder = {
         customer: req.body.customer,
         serviceDate: req.body.serviceDate,
-        serviceTime: req.body.serviceTime,
+        serviceStartTime: req.body.serviceStartTime,
+        serviceEndTime: req.body.serviceEndTime,
         serviceDescription: req.body.serviceDescription,
         serviceType: req.body.serviceType,
         dispatch: req.user.uid,
         serviceManager: req.body.serviceManager,
         officeManager: req.body.officeManager,
         crewMembers: req.body.crewMembers,
-        prevJobNumber: req.body.prevJobNumber,
+        jobNumber: req.body.jobNumber,
         notes: req.body.notes,
         officeNotes: req.body.officeNotes,
         quote: req.body.quote,
-        createdAt: new Date().toISOString(),
-        serviceDone: []
+        serviceDone: [],
+        createdAt: new Date().toISOString()
     };
 
     const {valid, errors} = validateWorkOrderData(workOrder);
@@ -47,7 +48,7 @@ exports.createWorkOrder = (req, res) => {
 
     db.doc(`/users/${workOrder.customer}`).get()
         .then(doc => {
-            workOrder.customerName = `${doc.data().firstName} ${doc.data().lastName}`;
+            workOrder.customerName = doc.data().businessName;
         })
         .catch(err => {
             console.log(err)
@@ -57,11 +58,10 @@ exports.createWorkOrder = (req, res) => {
         .then(data => {
             data.forEach(doc => {
                 if(doc.exists) {
-                    workOrder.jobNumber = doc.data().jobNumber + 1;
-
+                    workOrder.workOrderId = doc.data().workOrderId + 1;
                 };
             });
-            return db.doc(`/work-orders/${workOrder.jobNumber}`).set(workOrder);
+            return db.doc(`/work-orders/${workOrder.workOrderId}`).set(workOrder);
         })
         .then(() => {
             return res.status(201).json({ message: 'Work order created successfully' })

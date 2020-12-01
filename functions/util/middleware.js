@@ -249,7 +249,7 @@ exports.validateWorkOrderData = data => {
     if(isEmpty(data.serviceDate)) {
         errors.serviceDate = 'Must not be empty';
     };
-    if(isEmpty(data.serviceTime)) {
+    if(isEmpty(data.serviceStartTime)) {
         errors.serviceTime = 'Must not be empty';
     };
     if(isEmpty(data.serviceDescription)) {
