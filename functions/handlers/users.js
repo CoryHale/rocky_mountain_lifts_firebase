@@ -12,6 +12,27 @@ const {
   validateUpdateData,
 } = require("../util/middleware");
 
+exports.getCurrentUser = (req, res) => {
+  let userData = {};
+
+  db.doc(`/users/${req.user.uid}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData = doc.data();
+        return res.status(200).json(userData);
+      } else {
+        return res.status(404).json({ error: "User not found" });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+
+
 exports.registerEmployee = (req, res) => {
   const newUser = {
     firstName: req.body.firstName,
@@ -102,25 +123,6 @@ exports.login = (req, res) => {
           console.error(err);
           return res.status(403).json({ general: 'email or password is incorrect' });
       });
-};
-
-exports.getAuthenticatedUser = (req, res) => {
-  let userData = {};
-
-  db.doc(`/users/${req.user.uid}`)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        userData.credentials = doc.data();
-        return res.status(200).json(userData);
-      } else {
-        return res.status(404).json({ error: "User not found" });
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      return res.status(500).json({ error: err.code });
-    });
 };
 
 exports.getAllEmployees = (req, res) => {

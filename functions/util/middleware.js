@@ -296,6 +296,34 @@ exports.validateTaskData = data => {
     };
 };
 
+exports.validateEventData = data => {
+    let errors = {};
+
+    if(isEmpty(data.title)) {
+        errors.title = 'Must not be empty';
+    };
+    if(isEmpty(data.startDate)) {
+        errors.startDate = 'Must not be empty';
+    };
+    if(!isEmpty(data.startDate) && !isEmpty(data.endDate) && data.endDate < data.startDate) {
+        errors.endDate = 'End date must come after start date';
+    };
+    if(isEmpty(data.startTime) && !isEmpty(data.endTime)) {
+        errors.endTime = 'Must have start time';
+    };
+    if(data.extendedProps && isEmpty(data.extendedProps.location)) {
+        errors.location = 'Must not be empty';
+    };
+    if(data.extendedProps && data.extendedProps.invitees.length === 0) {
+        errors.invitees = 'Must not be empty';
+    };
+
+    return {
+        errors,
+        valid: Object.keys(errors).length === 0 ? true : false
+    }
+}
+
 // Helper Functions
 
 const isEmpty = string => {

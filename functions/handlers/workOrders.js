@@ -37,7 +37,9 @@ exports.createWorkOrder = (req, res) => {
         officeNotes: req.body.officeNotes,
         quote: req.body.quote,
         serviceDone: [],
-        createdAt: new Date().toISOString()
+        crewPunches: [],
+        createdAt: new Date().toISOString(),
+        status: 'Open'
     };
 
     const {valid, errors} = validateWorkOrderData(workOrder);
@@ -108,16 +110,10 @@ exports.getWorkOrder = (async (req, res) => {
     };
 });
 
-exports.submitWorkOrderForReview = (req, res) => {
-    let submittedWorkOrder = req.body;
+exports.editWorkOrder = (req, res) => {
+    const update = req.body;
 
-    // const { valid, errors } = validateSubmittedWorkOrder(submittedWorkOrder);
-
-    // if(!valid) {
-    //     return res.status(400).json(errors);
-    // };
-
-    db.doc(`/work-orders/${req.body.jobNumber}`).update(submittedWorkOrder)
+    db.doc(`/work-orders/${req.body.workOrderId}`).update(update)
         .then(() => {
             return res.status(200).json({ message: 'Update successful' });
         })

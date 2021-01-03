@@ -14,9 +14,9 @@ const { db } = require('./util/admin');
 server.use(cors());
 
 const { 
+    getCurrentUser,
     registerEmployee,
-    login, 
-    getAuthenticatedUser,
+    login,
     getAllEmployees,
     getAllCustomers,
     getAllUsers,
@@ -29,26 +29,35 @@ const {
 } = require('./handlers/users');
 
 const {
-    getCustomerNotes
-} = require('./handlers/notes');
-
-const {
     getAllTasks,
     getCustomerTasks,
-    createTask
+    createTask,
+    editTask,
+    deleteTask,
 } = require('./handlers/tasks');
+
+const {
+    createEvent,
+    getEvents,
+    deleteEvent
+} = require('./handlers/events');
 
 const {
     getAllWorkOrders,
     createWorkOrder,
     getWorkOrder,
-    submitWorkOrderForReview,
+    editWorkOrder,
 } = require('./handlers/workOrders');
 
+const {
+    createNote,
+    getCustomerNotes,
+} = require('./handlers/notes');
+
 // user routes
+server.get('/currentUser', FBAuth, getCurrentUser);
 server.post('/e_register', FBAuth, registerEmployee);
 server.post('/login', login);
-server.get('/user', FBAuth, getAuthenticatedUser);
 server.get('/employees', FBAuth, getAllEmployees);
 server.get('/customers', FBAuth, getAllCustomers);
 server.get('/users', FBAuth, getAllUsers);
@@ -59,18 +68,26 @@ server.put('/customer', FBAuth, editCustomer);
 server.get('/customer/:id', FBAuth, getCustomer);
 server.put('/customer', FBAuth, addEmployeeToCustomer);
 
-// notes routes
-server.get('/notes/:id', FBAuth, getCustomerNotes);
-
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);
 server.get('/customer_tasks/:id', FBAuth, getCustomerTasks);
 server.post('/tasks', FBAuth, createTask);
+server.put('/task', FBAuth, editTask);
+server.delete('/task/:id', FBAuth, deleteTask);
+
+// event routes
+server.post('/events', FBAuth, createEvent);
+server.get('/events', FBAuth, getEvents);
+server.delete('/event/:id', FBAuth, deleteEvent);
 
 // work order routes
 server.get('/work_orders', FBAuth, getAllWorkOrders);
 server.post('/work_orders', FBAuth, createWorkOrder);
 server.get('/work_order/:id', FBAuth, getWorkOrder);
-server.put('/work_order', FBAuth, submitWorkOrderForReview);
+server.put('/work_order', FBAuth, editWorkOrder);
+
+// notes routes
+server.post('/notes', FBAuth, createNote);
+server.get('/notes/:id', FBAuth, getCustomerNotes);
 
 exports.api = functions.https.onRequest(server);

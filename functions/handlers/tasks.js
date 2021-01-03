@@ -46,8 +46,41 @@ exports.createTask = (req, res) => {
     };
 
     db.collection('tasks').add(task)
+        .then((doc) => {
+            console.log(doc.id)
+            const updatedTask = {
+                ...task,
+                taskId: doc.id
+            };
+            return db.doc(`/tasks/${doc.id}`).update(updatedTask);
+        })
         .then(() => {
             return res.status(201).json({ message: 'Task was created successfully' });
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};
+
+exports.editTask = (req, res) => {
+    const updatedTask = req.body;
+    const taskId = req.body.taskId;
+
+    db.doc(`/tasks/${taskId}`).update(updatedTask)
+        .then(() => {
+            return res.status(200).json({ message: "Task was updated successfully"});
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};
+
+exports.deleteTask = (req, res) => {
+    db.doc(`/tasks/${req.params.id}`).delete()
+        .then(() => {
+            return res.status(200).json({ message: 'Task was deleted successfully' })
         })
         .catch(err => {
             console.error(err);
