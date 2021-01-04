@@ -4,7 +4,7 @@ const { validateTaskData } = require('../util/middleware');
 
 exports.getAllTasks = (req, res) => {
     const tasks = [];
-    db.collection('tasks').where('employeeId', '==', req.user.uid).get()
+    db.collection('tasks').get()
         .then(data => {
             data.forEach(doc => {
                 if(doc.exists) {

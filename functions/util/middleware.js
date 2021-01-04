@@ -286,8 +286,8 @@ exports.validateTaskData = data => {
     if(isEmpty(data.taskTime)) {
         errors.taskTime = 'Must not be empty';
     };
-    if(isEmpty(data.employeeId)) {
-        errors.employeeId = 'Must select an option';
+    if(data.assignedTo.length === 0) {
+        errors.assignedTo = 'Must select an option';
     };
 
     return {
