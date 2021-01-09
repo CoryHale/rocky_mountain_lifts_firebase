@@ -23,6 +23,8 @@ exports.getAllWorkOrders = (req, res) => {
 exports.createWorkOrder = (req, res) => {
     const workOrder = {
         customer: req.body.customer,
+        contactName: req.body.contactName,
+        contactNumber: req.body.contactNumber,
         serviceDate: req.body.serviceDate,
         serviceStartTime: req.body.serviceStartTime,
         serviceEndTime: req.body.serviceEndTime,

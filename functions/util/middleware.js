@@ -45,9 +45,6 @@ exports.validateCustomerData = data => {
     if(isEmpty(data.businessName)) {
         errors.businessName = 'Must not be empty';
     };
-    if(isEmpty(data.industry)) {
-        errors.industry = 'Must not be empty';
-    };
     if(data.primaryContact) {
         if(isEmpty(data.primaryContact.firstName)) {
             if(!errors.primaryContact) {
@@ -248,9 +245,6 @@ exports.validateWorkOrderData = data => {
     };
     if(isEmpty(data.serviceDate)) {
         errors.serviceDate = 'Must not be empty';
-    };
-    if(isEmpty(data.serviceStartTime)) {
-        errors.serviceTime = 'Must not be empty';
     };
     if(isEmpty(data.serviceDescription)) {
         errors.serviceDescription = 'Must not be empty';
