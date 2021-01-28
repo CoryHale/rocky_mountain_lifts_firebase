@@ -66,7 +66,7 @@ server.put('/employee/status', FBAuth, changeEmployeeStatus);
 server.post('/c_register', FBAuth, registerCustomer);
 server.put('/customer', FBAuth, editCustomer);
 server.get('/customer/:id', FBAuth, getCustomer);
-server.put('/customer', FBAuth, addEmployeeToCustomer);
+server.put('/customer-employee', FBAuth, addEmployeeToCustomer);
 
 // task routes
 server.get('/tasks', FBAuth, getAllTasks);

@@ -376,6 +376,9 @@ exports.addEmployeeToCustomer = (req, res) => {
   const customerId = req.body.userId;
   let updateData = req.body;
 
+  console.log("here")
+  console.log(updateData)
+
   if (customerId) {
     db.doc(`/users/${customerId}`)
       .update(updateData)
