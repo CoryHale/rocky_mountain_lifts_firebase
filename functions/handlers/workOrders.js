@@ -124,3 +124,14 @@ exports.editWorkOrder = (req, res) => {
             return res.status(500).json({ error: err.code });
         });
 };
+
+exports.deleteWorkOrder = (req, res) => {
+    db.doc(`/work-orders/${req.params.id}`).delete()
+        .then(() => {
+            return res.status(200).json({ message: 'Work order was deleted successfully' })
+        })
+        .catch(err => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+        });
+};

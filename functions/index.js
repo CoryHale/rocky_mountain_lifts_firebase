@@ -47,6 +47,7 @@ const {
     createWorkOrder,
     getWorkOrder,
     editWorkOrder,
+    deleteWorkOrder,
 } = require('./handlers/workOrders');
 
 const {
@@ -85,6 +86,7 @@ server.get('/work_orders', FBAuth, getAllWorkOrders);
 server.post('/work_orders', FBAuth, createWorkOrder);
 server.get('/work_order/:id', FBAuth, getWorkOrder);
 server.put('/work_order', FBAuth, editWorkOrder);
+server.delete('/work_order/:id', FBAuth, deleteWorkOrder);
 
 // notes routes
 server.post('/notes', FBAuth, createNote);
